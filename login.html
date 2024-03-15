@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/imgs/bglogin.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #FCD116;
+        }
+        h1 {
+            font-size: 60px;
+            margin-bottom: 30px;
+        }
+
+        .login-container {
+            background-color: rgb(0, 95, 172);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .btn-entrar {
+            background-color: #FCD116; 
+            border-color: #FCD116;
+            color: #004C98; 
+            transition: all 0.3s ease;
+            font-size: 24px;
+            padding: 12px 24px;
+        }
+
+        .btn-entrar:hover {
+            background-color: #009b3a; 
+            border-color: #009b3a;
+            color: #FCD116; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height: 20vh;">
+            <div class="col text-center">
+                <img src="imgs/Logodagalera.png" alt="Logo" class="logo img-fluid" style="max-width: 200px;">
+            </div>
+        </div>
+        <div class="login-container">
+            <h1>RACHA DA GALERA!</h1>
+            <button id="btn-entrar" class="btn btn-entrar">Entrar</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('btn-entrar').addEventListener('click', function() {
+            // Redirecionar para outra página
+            window.location.href = 'paginasorteio.html';
+        });
+    </script>
+</body>
+</html>

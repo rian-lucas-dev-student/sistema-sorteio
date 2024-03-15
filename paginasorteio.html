@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Sistema de Sorteio - Página Sorteio</title>
+    <style>
+        .telaSorteio {
+            display: block; 
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('imgs/bgsorteio.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #009b3a;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .menu {
+            float: right;
+            margin-right: 20px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 18px;
+        }
+
+        .menu a:hover {
+            color: #ffc72c;
+        }
+
+        .btn {
+            background-color: #009b3a;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #005f1a;
+        }
+
+        .list-group-item {
+            background-color: #fff;
+            border-color: #009b3a;
+            color: #000;
+        }
+
+        .list-group-item:hover {
+            background-color: #ffc72c;
+        }
+
+        .list-group-item strong {
+            color: #000;
+        }
+
+        #modalResultadoSorteio .modal-content {
+            background-color: #ffc72c;
+            color: #009b3a;
+        }
+
+        #modalResultadoSorteio .modal-header {
+            background-color: #009b3a;
+            color: white;
+            border-bottom: none;
+        }
+
+        #modalResultadoSorteio .modal-footer {
+            border-top: none;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Página Sorteio -->
+    <div id="telaSorteio" class="telaSorteio">
+        <h1 class="mb-4">Página Sorteio</h1>
+
+        <!-- Formulário de Cadastro -->
+        <form id="cadastroForm">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome do Jogador:</label>
+                <input type="text" class="form-control" id="nome" required>
+            </div>
+            <div class="mb-3">
+                <label for="posicao" class="form-label">Posição:</label>
+                <select class="form-control" id="posicao" required>
+                    <option value="Linha">Linha</option>
+                    <option value="Goleiro">Goleiro</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="cadastrarJogador()">Cadastrar</button>
+        </form>
+
+        <hr>
+
+        <!-- Botão de Sorteio -->
+        <button type="button" class="btn btn-success" onclick="exibirModalResultadoSorteio()">Realizar Sorteio</button>
+
+        <!-- Botão para Exibir Lista de Jogadores -->
+        <button type="button" class="btn btn-info" onclick="exibirListaJogadores()">Exibir Lista de Jogadores</button>
+
+        <!-- Resultado do Sorteio Modal -->
+        <div class="modal" tabindex="-1" id="modalResultadoSorteio">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Resultado do Sorteio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Conteúdo do Resultado do Sorteio será preenchido dinamicamente com JavaScript -->
+                        <ul id="modalResultadoEquipes" class="list-group">
+                            <!-- Equipes e jogadores serão exibidos aqui -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Jogadores Cadastrados -->
+        <h2 class="mt-4">Jogadores Cadastrados</h2>
+        <ul id="listaJogadores" class="list-group">
+            <!-- A lista será preenchida dinamicamente com JavaScript -->
+        </ul>
+    </div>
+</div>
+<!-- ... (código anterior) ... -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Recuperar os dados do armazenamento local (se existirem)
+    var jogadores = JSON.parse(localStorage.getItem('jogadores')) || [];
+
+    // Função para cadastrar um jogador
+    function cadastrarJogador() {
+        var nome = document.getElementById('nome').value;
+
+        // Verificar se o campo de nome está preenchido
+        if (!nome.trim()) {
+            alert('Por favor, insira um nome válido.');
+            return;
+        }
+
+        var posicao = document.getElementById('posicao').value;
+
+        // Adicionar o jogador ao array de jogadores
+        var jogador = { nome: nome, posicao: posicao };
+
+        jogadores.push(jogador);
+
+        // Salvar os jogadores no armazenamento local
+        localStorage.setItem('jogadores', JSON.stringify(jogadores));
+
+        // Limpar os campos de nome e posição
+        document.getElementById('nome').value = '';
+        document.getElementById('posicao').value = 'Linha';
+
+        // Atualizar a lista de jogadores exibida
+        exibirListaJogadores();
+    }
+
+    // Função para exibir o modal com o resultado do sorteio
+    function exibirModalResultadoSorteio() {
+        // Filtrar apenas os jogadores "Linha" para o sorteio
+        var jogadoresLinha = jogadores.filter(jogador => jogador.posicao === 'Linha');
+
+        // Verificar se há jogadores "Linha" para realizar o sorteio
+        if (jogadoresLinha.length < 4) {
+            alert('É necessário ter pelo menos 4 jogadores "Linha" para realizar o sorteio.');
+            return;
+        }
+
+        // Embaralhar a ordem dos jogadores "Linha"
+        var jogadoresEmbaralhados = jogadoresLinha.sort(() => Math.random() - 0.5);
+
+        // Dividir os jogadores em equipes (limite de 4 por equipe)
+        var equipes = [];
+        var equipeAtual = [];
+
+        jogadoresEmbaralhados.forEach(function (jogador, index) {
+            equipeAtual.push(jogador);
+
+            if (equipeAtual.length === 4 || index === jogadoresEmbaralhados.length - 1) {
+                equipes.push([...equipeAtual]); // Clonar a equipe atual para evitar referências
+                equipeAtual = [];
+            }
+        });
+
+        // Exibir o modal
+        var modalResultadoSorteio = new bootstrap.Modal(document.getElementById('modalResultadoSorteio'));
+        modalResultadoSorteio.show();
+
+        // Preencher o conteúdo do modal com os nomes dos jogadores "Linha"
+        var modalResultadoEquipes = document.getElementById('modalResultadoEquipes');
+        modalResultadoEquipes.innerHTML = '';
+
+        equipes.forEach(function (equipe, index) {
+            var listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.innerHTML = '<strong>Equipe ' + (index + 1) + ':</strong> ' + equipe.map(jogador => jogador.nome).join(', ');
+            modalResultadoEquipes.appendChild(listItem);
+        });
+    }
+
+    // Função para exibir a lista de jogadores
+    function exibirListaJogadores() {
+        // Exibir a lista de jogadores na div correspondente
+        var listaJogadoresElement = document.getElementById('listaJogadores');
+        listaJogadoresElement.innerHTML = '';
+
+        jogadores.forEach(function (jogador, index) {
+            var listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.textContent = (index + 1) + '. ' + jogador.nome + (jogador.posicao ? ' - ' + jogador.posicao : '');
+
+            // Adicionar o botão de excluir
+            var btnExcluir = document.createElement('button');
+            btnExcluir.className = 'btn btn-danger btn-sm float-end';
+            btnExcluir.textContent = 'Excluir';
+            btnExcluir.onclick = function() {
+                excluirJogador(index);
+            };
+
+            listItem.appendChild(btnExcluir);
+            listaJogadoresElement.appendChild(listItem);
+        });
+    }
+
+    // Função para excluir um jogador
+    function excluirJogador(index) {
+        jogadores.splice(index, 1); // Remover o jogador do array
+        localStorage.setItem('jogadores', JSON.stringify(jogadores)); // Atualizar o armazenamento local
+        exibirListaJogadores(); // Atualizar a lista exibida
+    }
+</script>
+
+</body>
+</html>
+
+
+
